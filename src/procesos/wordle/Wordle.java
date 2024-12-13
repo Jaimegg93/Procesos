@@ -1,32 +1,56 @@
 package procesos.wordle;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.Scanner;
 
 public class Wordle {
-    public static void wordle(){
-        int intentos = 10;
-        while(intentos>0){
-            try{
+    public static void main(String[] args) {
+        try {
+            wordle();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    public static void wordle() throws IOException {
+        Scanner sc = new Scanner(System.in);
+        int vuelta = 0;
+        String intento = " ";
+        String palabra = "";
 
-            Process palabra = new ProcessBuilder("C:\\Users\\jaime\\Desktop\\Calse\\Procesos\\Tema1\\Verdadero\\bin\\Release\\Verdadero.exe").start();
-            Process analizador = new ProcessBuilder("C:\\Users\\jaime\\Desktop\\Calse\\Procesos\\Tema1\\Mentiroso\\bin\\Release\\Mentiroso.exe").start();
-
-            BufferedReader lectorpalabra = new BufferedReader(new InputStreamReader(palabra.getInputStream()));
-            BufferedReader lectoranalizador = new BufferedReader(new InputStreamReader(analizador.getInputStream()));
-
-            PrintWriter escritorpalabra = new PrintWriter(palabra.getOutputStream(), true);
-            PrintWriter escritoranalizador = new PrintWriter(analizador.getOutputStream(), true);
-
-
-
-            intentos--;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        while (true) {
+            if (vuelta == 10) {
+                System.out.println("Mas suerte la proxima");
+                break;
             }
+            Process procesoPadre = new ProcessBuilder("D:\\Clase\\Programacion de Procesos\\Proyectos\\untitled1\\cmake-build-debug\\untitled1.exe").start();
+
+            // Crear el escritor para enviar datos al programa C
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(procesoPadre.getOutputStream()));
+
+            // Solicitar al usuario que introduzca una palabra
+
+            System.out.println("Escribe tu intento (ESCRIBE EN MAYUSCULAS)");
+            intento = sc.nextLine();
+
+            // Enviar la palabra al programa C
+            writer.write(intento);
+            writer.newLine(); // Enviar un salto de línea para que el programa C reciba la entrada
+            writer.close();
+
+            // Leer la salida del programa C
+            BufferedReader reader = new BufferedReader(new InputStreamReader(procesoPadre.getInputStream()));
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                System.out.println("Salida del preso Hijo: " + linea);
+                palabra = linea;
+            }
+            if (intento.equals(palabra)) {
+                System.out.println("Felicidades!!");
+                break;
+            }
+            reader.close();
+            vuelta++;
         }
     }
 }
