@@ -1,4 +1,4 @@
-package aleatorios;
+package procesos.aleatorios;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

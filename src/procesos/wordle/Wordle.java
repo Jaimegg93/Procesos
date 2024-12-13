@@ -1,4 +1,4 @@
-package wordle;
+package procesos.wordle;
 
 import java.io.BufferedReader;
 import java.io.IOException;

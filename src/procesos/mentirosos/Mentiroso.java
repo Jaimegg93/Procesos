@@ -1,4 +1,4 @@
-package mentirosos;
+package procesos.mentirosos;
 
 import java.io.BufferedReader;
 import java.io.IOException;
